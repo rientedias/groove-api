@@ -1,19 +1,44 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Headers } from '@nestjs/common';
+import { Customers } from '../../class/customers';
+import { CustomersService } from '../../services/customers.service';
 
 @Controller('customers')
 export class CustomersController {
 
-@Get(':id')
-public async getById(): Promise<any[]>{
+    constructor(private customerService: CustomersService) { }
 
-    return 
-}
+    @Get(':id')
+    public async getById(@Param('id') id: number): Promise<any> {
 
-@Post()
+        try {
 
-public async createCustomer():Promise<any[]>{
-    return
-}
+            const key = await this.customerService.getById(id);
+            return {
+                sucess: true,
+                key: key
+            }
+
+        }
+        catch (error) {
+
+            return error
+        }
+
+
+    }
+
+    @Post()
+    public async createCustomer(
+
+        @Body() customer: Customers,
+        
+        
+    ): Promise<Customers> {
+
+        const customers = await this.customerService.createCustomer(customer);
+
+        return customers;
+    }
 
 
 
